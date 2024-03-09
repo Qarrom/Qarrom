@@ -1,0 +1,106 @@
+- 👋 Hi, I’m @Qarrom
+- 👀 I’m interested in ...
+- 🌱 I’m currently learning ...
+- 💞️ I’m looking to collaborate on ...
+- 📫 How to reach me ...
+- 😄 Pronouns: ...
+- ⚡ Fun fact: ...
+
+<!---
+Qarrom/Qarrom is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+You can click the Preview link to take a look at your changes.
+--->
+#this is the rework of v2 crew agents - for reference, Ramsey is still clueless but doing something
+from crewai import Agent, Task, Crew, Process
+
+# Agent Definitions
+
+# Agent for Brand Strategy and Analysis
+
+brand_strategist = Agent(
+    role="Lead Brand Strategist, Researcher and Analyst",
+    goal="Conduct amazing analysis on the brand, its mission, target audience, and communication guidelines. Provide in-depth insights into the tone of voice, brand persona, language styles, and example content.",
+    backstory="Specializing in dissecting and understanding brand guidelines to enable cohesive content creation.",
+    tools=["Documentation Analysis Tool", "Custom Brand Research Tool"]
+)
+
+# Detailed Task for Brand Analysis
+brand_analysis_task = Task(
+    description="""
+    Conduct a comprehensive analysis of the provided brand documentation ('qarrom branding 4.2') and brand content examples ('qarrom brand content examples'). Your analysis should cover the following aspects:
+    
+    1. Brand Guidelines Analysis: Examine the 'qarrom branding 4.2' document to understand the brand's mission, vision, target audience, and communication guidelines. Pay special attention to the brand's tone of voice, persona, and language styles. Identify and outline the unique features that differentiate the brand from its competitors. Summarize the overall narrative and position that the brand aims to present to its audience.
+    
+    2. Content Example Analysis: Analyze the structure, tone of voice, and language styles of the provided 'qarrom brand content examples'. Assess how these elements contribute to the brand's communication goals and audience engagement. Identify patterns and strategies that can be applied to future content creation to ensure consistency and alignment with the brand's identity.
+    
+    Your final report should provide a clear articulation of the brand's key communication guidelines, positioning, and target audience. Include detailed insights into the structure, language patterns, and styles observed in the content examples. Offer recommendations for crafting content that resonates with the brand's identity and appeals to its target audience.
+    
+    Emphasize attention to detail to ensure a comprehensive analysis. It's crucial that this task is approached with a critical eye to not only understand the existing guidelines and content but also to derive actionable insights that will support the creation of representative and cohesive brand content in 2024 and beyond.
+    """,
+    agent=brand_strategist
+)
+
+# Agent for Twitter Thread Research
+twitter_researcher = Agent(
+    role="Lead Twitter Thread Research",
+    goal="Conduct in-depth research and analysis on Twitter threads. Provide insights into structuring and writing effective threads.",
+    backstory="Specializing in analyzing Twitter content, specifically threads, to guide effective thread creation.",
+    tools=["Twitter API Integration Tool", "Thread Analysis Tool"]
+)
+
+# Detailed Task for Twitter Thread Research
+twitter_research_task = Task(
+    description="""
+    Conduct an in-depth analysis of the provided 'twitter thread best practices' documentation and 'twitter thread examples'. Your analysis should aim to uncover the underlying structure and strategies that contribute to the success of engaging Twitter threads. Key areas to focus on include:
+    
+    1. Documentation Analysis: Review the 'twitter thread best practices' to identify and outline critical success factors, recommended frameworks, and copywriting techniques that are highlighted as effective for engaging the audience. Look for insights into the ideal structure, length, and content types (e.g., visual, textual) that enhance tweet readability and engagement.
+    
+    2. Thread Examples Analysis: Examine the provided 'twitter thread examples', focusing on their execution of the identified best practices and frameworks. Analyze how these examples leverage unique features, narrative techniques, and content organization to capture attention and drive interaction.
+    
+    Your final report should synthesize these findings into clear, actionable insights that define the key components of successful Twitter threads. Highlight specific frameworks, themes, and copywriting strategies that can serve as a guide for crafting high-quality, engaging content. Incorporate relevant examples to illustrate these points effectively.
+    
+    Emphasize the importance of detail in your analysis to ensure a thorough understanding of what makes a Twitter thread successful and engaging in the current social media landscape (2024). The goal is to provide a foundational architecture that can inform future Twitter thread creation, emphasizing innovation, audience engagement, and alignment with best practices.
+    """,
+    agent=twitter_researcher
+)
+
+# Agent for Twitter Copywriting
+twitter_copywriter = Agent(
+    role="Master Twitter Thread Writer",
+    goal="Utilize the research of the brand researcher and thread researcher alongside user inputs to create engaging Twitter threads.",
+    backstory="Expert in crafting Twitter threads that align with brand guidelines and engage the audience.",
+    tools=["Content Creation Tool", "Engagement Analysis Tool"]
+)
+
+# Revised Detailed Task for Twitter Copywriting
+twitter_copywriting_task = Task(
+    description="""
+    Task: Produce an engaging and informative Twitter thread for a brand that integrates the brand's communication guidelines, effective Twitter thread writing practices identified by the brand research and thread research agents, and specific details or objectives provided by the user. The final output should be an actual Twitter thread, ready for publication.
+    
+    1. Brand Understanding: Review the brand documentation and insights provided by the [brand research agent] to deeply understand the brand's identity, tone of voice, target audience, and communication guidelines.
+    
+    2. Thread Writing Best Practices: Utilize the research compiled by the [thread research agent] on successful Twitter thread structures, engagement strategies, and copywriting techniques.
+    
+    3. Assess user-provided inputs for specific details, topics, or goals for the Twitter thread.
+    
+    4. If user inputs are lacking or not provided:
+       a. Conduct internet research to find relevant information, statistics, or trends that align with the brand's identity and the intended message of the thread.
+       b. Use reputable sources and ensure that the information gathered through research is accurately represented and cited where applicable.
+    
+    5. Craft the Twitter thread, ensuring it aligns with the brand's tone, meets engagement strategies identified in the research, and incorporates any user-specific or researched content to create engaging and informative content.
+    
+    The final output must be a complete Twitter thread consisting of multiple tweets that are cohesively linked, ready for review and eventual publication. The thread should include creative ideas that align with the brand's messaging, effectively engage the target audience, and achieve the set objectives, all while adhering to proven Twitter thread best practices for readability and interaction.
+    """,
+    agent=twitter_copywriter
+)
+
+# Instantiate Crew with Sequential Process
+crew = Crew(
+    agents=[brand_strategist, twitter_researcher, twitter_copywriter],
+    tasks=[brand_analysis_task, twitter_research_task, twitter_copywriting_task],
+    process=Process.sequential
+)
+
+# Execute the workflow
+result = crew.kickoff()
+
